@@ -1,13 +1,12 @@
 {
-  "name": "alexa-app",
-  "version": "2.3.4",
-  "description": "A module to simplify creation of Alexa (Amazon Echo) apps (Skills) using Node.js",
+  "name": "dingdong",
+  "version": "1.0.0",
+  "description": "A module to simplify creation of dingdong apps (Skills) using Node.js",
   "main": "index.js",
-  "author": "Matt Kruse <github@mattkruse.com> (http://MattKruse.com)",
+  "author": "Owen Xue",
   "keywords": [
-    "amazon",
-    "echo",
-    "alexa",
+    "jd",
+    "dingdong",
     "skills"
   ],
   "scripts": {
@@ -18,10 +17,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/matt-kruse/alexa-app.git"
+    "url": "git@github.com:beesui/dingdong.git"
   },
   "bugs": {
-    "url": "https://github.com/matt-kruse/alexa-app/issues"
+    "url": "https://github.com/beesui/dingdong/issues"
   },
   "license": "MIT",
   "dependencies": {
