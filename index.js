@@ -2,6 +2,7 @@ var Promise = require("bluebird");
 var AlexaUtterances = require("alexa-utterances");
 var SSML = require("./to-ssml");
 var dingdong = {};
+var _ = require('lodash');
 var moment = require('moment');
 
 dingdong.response = function() {
@@ -333,17 +334,17 @@ dingdong.request = function(json) {
   this.sessionDetails = {
     "new": this.data.session.is_new,
     "sessionId": this.data.session.sid,
-    "attributes": this.data.session.params
+    "attributes": _.get(this.data, 'session.params')
   };
   this.version = this.data.version;
   this.seq = this.data.seq;
   this.content = this.data.content;
   this.userId = this.data.user.user_id;
-  this.userAttributes = this.data.user.params;
+  // this.userAttributes = _.get(this.data, 'user.params');
   this.applicationId = this.data.biz_info.biz_id;
   this.applicationName = this.data.biz_info.biz_name;
   this.sessionId = this.data.session.sid;
-  this.sessionAttributes = this.data.session.params;
+  // this.sessionAttributes = _.get(this.data, 'session.params');
   this.isSessionNew = (true === this.data.session.is_new);
   this.session = function(key) {
     try {
@@ -417,7 +418,7 @@ dingdong.app = function(name, endpoint) {
     return new Promise(function(resolve, reject) {
       var request = new dingdong.request(request_json);
       var response = new dingdong.response();
-      response.response.seq = request.req;
+      response.response.seq = request.seq;
       var postExecuted = false;
       // Attach Promise resolve/reject functions to the response object
       response.send = function(exception) {
