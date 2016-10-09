@@ -298,7 +298,8 @@ dingdong.response = function() {
     if (typeof val == "undefined") {
       return this.response.sessionAttributes[key];
     } else {
-      this.response.sessionAttributes[key] = val;
+      // if(!this.response.sessionAttributes) this.response.sessionAttributes = {};
+      // this.response.sessionAttributes[key] = val;
     }
     return this;
   };
@@ -340,11 +341,11 @@ dingdong.request = function(json) {
   this.seq = this.data.seq;
   this.content = this.data.content;
   this.userId = this.data.user.user_id;
-  // this.userAttributes = _.get(this.data, 'user.params');
+  this.userAttributes = _.get(this.data, 'user.params');
   this.applicationId = this.data.biz_info.biz_id;
   this.applicationName = this.data.biz_info.biz_name;
   this.sessionId = this.data.session.sid;
-  // this.sessionAttributes = _.get(this.data, 'session.params');
+  this.sessionAttributes = _.get(this.data, 'session.params');
   this.isSessionNew = (true === this.data.session.is_new);
   this.session = function(key) {
     try {
@@ -457,7 +458,7 @@ dingdong.app = function(name, endpoint) {
         }
         if (!response.resolved) {
           if ("INTENT" === requestType) {
-            var intent = request_json.request.intent.name;
+            var intent = Object.keys(request_json.slots)[0];
             if (typeof self.intents[intent] != "undefined" && typeof self.intents[intent]["function"] == "function") {
               if (false !== self.intents[intent]["function"](request, response)) {
                 response.send();

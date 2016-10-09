@@ -1,6 +1,6 @@
 {
   "name": "dingdong",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A module to simplify creation of dingdong apps (Skills) using Node.js",
   "main": "index.js",
   "author": "Owen Xue",
