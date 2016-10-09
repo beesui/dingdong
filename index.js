@@ -1,54 +1,230 @@
 var Promise = require("bluebird");
 var AlexaUtterances = require("alexa-utterances");
 var SSML = require("./to-ssml");
-var alexa = {};
+var dingdong = {};
+var moment = require('moment');
 
-alexa.response = function() {
+dingdong.response = function() {
   this.resolved = false;
+  // "responses": {
+  //   "200": {
+  //     "description": "OK",
+  //     "schema": {
+  //       "type": "object",
+  //       "properties": {
+  //         "version": {
+  //           "type": "string",
+  //           "example": "1.0",
+  //           "description": "版本号，回传平台调用时传递的值"
+  //         },
+  //         "is_end": {
+  //           "type": "boolean",
+  //           "description": "由开发者服务决定本次会话是否结束，如果标识为结束（true）平台会清除本次会话在平台保持的会如果标识为不结束（false）平台继续为用户保持当前会话数据。",
+  //           "example": true
+  //         },
+  //         "seq": {
+  //           "type": "string",
+  //           "example": "123123123",
+  //           "description": "交互流水号，回传平台调用时传递的值"
+  //         },
+  //         "ts": {
+  //           "type": "integer",
+  //           "example": 8728881267736576,
+  //           "description": "开发者服务应答平台的请求时间，格式为：当前时间的毫秒值",
+  //           "format": "int64"
+  //         },
+  //         "need_slot": {
+  //           "type": "string",
+  //           "example": "switch",
+  //           "description": "需要的槽值：如不为空则平台会主动为开发者收集此槽值服务，如用户输入的说法不符合槽值提取规为未识别重复收集。如为空，则表明不需要平台关注槽值的识别，全部透传到第三方服务进行判断。"
+  //         },
+  //         "device_show": {
+  //           "type": "object",
+  //           "properties": {
+  //             "items": {
+  //               "type": "array",
+  //               "items": {
+  //                 "type": "object",
+  //                 "description": "设备",
+  //                 "properties": {
+  //                   "type": {
+  //                     "type": "string",
+  //                     "description": "类型：1.TTS 2.AUDIO",
+  //                     "example": "1"
+  //                   },
+  //                   "content": {
+  //                     "type": "string",
+  //                     "description": "TTS播报内容；AUDIO链接。",
+  //                     "example": "hello"
+  //                   }
+  //                 },
+  //                 "additionalProperties": true
+  //               }
+  //             }
+  //           },
+  //           "description": "开发者需要音箱设备播报的内容。注：音箱会依据开发者给出的顺序播报。"
+  //         },
+  //         "device_action": {
+  //           "type": "object",
+  //           "properties": {
+  //             "items": {
+  //               "type": "array",
+  //               "items": {
+  //                 "type": "object",
+  //                 "description": "设备行为",
+  //                 "properties": {
+  //                   "invoke": {
+  //                     "type": "string",
+  //                     "description": "要调用的方法名",
+  //                     "example": "switch"
+  //                   },
+  //                   "params": {
+  //                     "type": "string",
+  //                     "description": "方法参数，JSON格式",
+  //                     "example": "on"
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           },
+  //           "description": "开发者需要调用音箱设备的预置行为，比如：灯效。注：音箱会依据开发者给出的顺序执行。"
+  //         },
+  //         "app_show": {
+  //           "type": "object",
+  //           "description": "开发者需要平台推送到音箱设备关联的手机App展现的内容，其中可以包含：文本、文本+图片、链接等",
+  //           "properties": {
+  //             "title": {
+  //               "type": "string",
+  //               "description": "开发者需要平台推送到音箱关联的手机App上展现的标题内容。注：不能超过20个字",
+  //               "example": "hello"
+  //             },
+  //             "type": {
+  //               "type": "string",
+  //               "description": "App展现内容类型：1. 纯文字 2. 文字+图片 3. 外部链接",
+  //               "example": "1"
+  //             },
+  //             "content": {
+  //               "type": "string",
+  //               "description": "type为1时使用",
+  //               "example": "hello"
+  //             },
+  //             "rich_contents": {
+  //               "type": "array",
+  //               "items": {
+  //                 "type": "object",
+  //                 "description": "推送到手机App上展现详细内容",
+  //                 "properties": {
+  //                   "type": {
+  //                     "type": "string",
+  //                     "description": "类型：1. 文字 2. 图片",
+  //                     "example": "1"
+  //                   },
+  //                   "content": {
+  //                     "type": "string",
+  //                     "description": "类型为1时：文字内容；类型为2时：图片链接，链接长度不可以超过512个字符",
+  //                     "example": "hello"
+  //                   }
+  //                 }
+  //               },
+  //               "description": "type为2时使用，注：App会根据开发者返回的顺序展示"
+  //             },
+  //             "url": {
+  //               "type": "string",
+  //               "description": "type为3时使用",
+  //               "example": "null"
+  //             }
+  //           }
+  //         },
+  //         "device_reprompt": {
+  //           "type": "object",
+  //           "description": "开发者需要用户无应答或输入有误的情况下，音箱重复播报的内容。",
+  //           "properties": {
+  //             "items": {
+  //               "type": "array",
+  //               "items": {
+  //                 "type": "object",
+  //                 "description": "设备行为",
+  //                 "properties": {
+  //                   "invoke": {
+  //                     "type": "string",
+  //                     "description": "要调用的方法名",
+  //                     "example": "switch"
+  //                   },
+  //                   "params": {
+  //                     "type": "string",
+  //                     "description": "方法参数，JSON格式",
+  //                     "example": "on"
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         }
+  //       },
+  //       "required": [
+  //         "version",
+  //         "is_end",
+  //         "ts",
+  //         "seq"
+  //       ],
+  //       "description": "请求返回内容"
+  //     }
+  //   }
+  // }
   this.response = {
-    "version": "1.0",
-    "sessionAttributes": {},
-    "response": {
-      "shouldEndSession": true
-    }
+    "version": '1.0',
+    "is_end": true,
+    "seq": '',
+    "ts": moment().valueOf()
   };
   this.say = function(str) {
-    if (typeof this.response.response.outputSpeech == "undefined") {
-      this.response.response.outputSpeech = {
-        "type": "SSML",
-        "ssml": SSML.fromStr(str)
+
+    if (typeof this.response.device_show == "undefined") {
+      this.response.device_show = {
+        "items": [{
+          "type": "1",
+          "content": str
+        }]
       };
     } else {
       // append str to the current outputSpeech, stripping the out speak tag
-      this.response.response.outputSpeech.ssml = SSML.fromStr(str, this.response.response.outputSpeech.ssml);
+      this.response.device_show.push({
+        "type": "1",
+        "content": str
+      });
     }
     return this;
   };
-  this.clear = function(/*str*/) {
-    this.response.response.outputSpeech = {
-      "type": "PlainText",
-      "text": ""
+  this.clear = function( /*str*/ ) {
+    this.response.device_show = {
+      "items": [{
+        "type": "1",
+        "content": ''
+      }]
     };
     return this;
   };
   this.reprompt = function(str) {
-    if (typeof this.response.response.reprompt == "undefined") {
-      this.response.response.reprompt = {
-        "outputSpeech": {
-          "type": "SSML",
-          "ssml": SSML.fromStr(str)
-        }
+    if (typeof this.response.device_reprompt == "undefined") {
+      this.response.device_reprompt = {
+        "items": [{
+          "type": "1",
+          "content": str
+        }]
       };
     } else {
       // append str to the current outputSpeech, stripping the out speak tag
-      this.response.response.reprompt.outputSpeech.ssml = SSML.fromStr(str, this.response.response.reprompt.outputSpeech.text);
+      this.response.device_reprompt.push({
+        "type": "1",
+        "content": str
+      });
     }
     return this;
   };
   this.card = function(oCard) {
-    if (2 == arguments.length) {  //backwards compat
+    if (2 == arguments.length) { //backwards compat
       oCard = {
-        type: "Simple",
+        type: '1',
         title: arguments[0],
         content: arguments[1]
       };
@@ -59,13 +235,22 @@ alexa.response = function() {
 
     switch (oCard.type) {
       case 'Simple':
-        requiredAttrs.push('content');
-        clenseAttrs.push('content');
+        oCard.type = '1';
         break;
       case 'Standard':
+        oCard.type = '2';
         requiredAttrs.push('text');
         clenseAttrs.push('text');
-        if (('image' in oCard) && ( !('smallImageUrl' in oCard['image']) && !('largeImageUrl' in oCard['image']) )) {
+        if (('image' in oCard) && (!('smallImageUrl' in oCard['image']) && !('largeImageUrl' in oCard['image']))) {
+          console.error('If card.image is defined, must specify at least smallImageUrl or largeImageUrl');
+          return this;
+        }
+        break;
+      case 'Link':
+        oCard.type = '3';
+        requiredAttrs.push('text');
+        clenseAttrs.push('text');
+        if (('image' in oCard) && (!('smallImageUrl' in oCard['image']) && !('largeImageUrl' in oCard['image']))) {
           console.error('If card.image is defined, must specify at least smallImageUrl or largeImageUrl');
           return this;
         }
@@ -91,18 +276,18 @@ alexa.response = function() {
       oCard[idx] = SSML.cleanse(oCard[idx]);
     });
 
-    this.response.response.card = oCard;
+    this.response.app_show = oCard;
 
     return this;
   };
   this.linkAccount = function() {
-    this.response.response.card = {
+    this.response.card = {
       "type": "LinkAccount"
     };
     return this;
   };
   this.shouldEndSession = function(bool, reprompt) {
-    this.response.response.shouldEndSession = bool;
+    this.response.is_end = bool;
     if (reprompt) {
       this.reprompt(reprompt);
     }
@@ -127,11 +312,11 @@ alexa.response = function() {
 
 };
 
-alexa.request = function(json) {
+dingdong.request = function(json) {
   this.data = json;
   this.slot = function(slotName, defaultValue) {
     try {
-      return this.data.request.intent.slots[slotName].value;
+      return this.data.slots[slotName].value;
     } catch (e) {
       console.error("missing intent in request: " + slotName, e);
       return defaultValue;
@@ -139,25 +324,27 @@ alexa.request = function(json) {
   };
   this.type = function() {
     try {
-      return this.data.request.type;
+      return this.data.status;
     } catch (e) {
       console.error("missing type", e);
       return null;
     }
   };
   this.sessionDetails = {
-    "new": this.data.session.new,
-    "sessionId": this.data.session.sessionId,
-    "userId": this.data.session.user.userId,
-    "accessToken": this.data.session.user.accessToken || null,
-    "attributes": this.data.session.attributes,
-    "application": this.data.session.application
+    "new": this.data.session.is_new,
+    "sessionId": this.data.session.sid,
+    "attributes": this.data.session.params
   };
-  this.userId = this.data.session.user.userId;
-  this.applicationId = this.data.session.application.applicationId;
-  this.sessionId = this.data.session.sessionId;
-  this.sessionAttributes = this.data.session.attributes;
-  this.isSessionNew = (true === this.data.session.new);
+  this.version = this.data.version;
+  this.seq = this.data.seq;
+  this.content = this.data.content;
+  this.userId = this.data.user.user_id;
+  this.userAttributes = this.data.user.params;
+  this.applicationId = this.data.biz_info.biz_id;
+  this.applicationName = this.data.biz_info.biz_name;
+  this.sessionId = this.data.session.sid;
+  this.sessionAttributes = this.data.session.params;
+  this.isSessionNew = (true === this.data.session.is_new);
   this.session = function(key) {
     try {
       return this.data.session.attributes[key];
@@ -168,9 +355,9 @@ alexa.request = function(json) {
   };
 };
 
-alexa.apps = {};
+dingdong.apps = {};
 
-alexa.app = function(name, endpoint) {
+dingdong.app = function(name, endpoint) {
   var self = this;
   this.name = name;
   this.messages = {
@@ -194,8 +381,8 @@ alexa.app = function(name, endpoint) {
   this.error = null;
 
   // pre/post hooks to be run on every request
-  this.pre = function(/*request, response, type*/) {};
-  this.post = function(/*request, response, type*/) {};
+  this.pre = function( /*request, response, type*/ ) {};
+  this.post = function( /*request, response, type*/ ) {};
 
   this.endpoint = endpoint;
   // A mapping of keywords to arrays of possible values, for expansion of sample utterances
@@ -222,10 +409,15 @@ alexa.app = function(name, endpoint) {
   this.sessionEnded = function(func) {
     self.sessionEndedFunc = func;
   };
+  this.noticeFunc = null;
+  this.notice = function(func) {
+    self.noticeFunc = func;
+  };
   this.request = function(request_json) {
     return new Promise(function(resolve, reject) {
-      var request = new alexa.request(request_json);
-      var response = new alexa.response();
+      var request = new dingdong.request(request_json);
+      var response = new dingdong.response();
+      response.response.seq = request.req;
       var postExecuted = false;
       // Attach Promise resolve/reject functions to the response object
       response.send = function(exception) {
@@ -251,7 +443,7 @@ alexa.app = function(name, endpoint) {
       try {
         var key;
         // Copy all the session attributes from the request into the response so they persist.
-        // The Alexa API doesn't think session variables should persist for the entire 
+        // The Alexa API doesn't think session variables should persist for the entire
         // duration of the session, but I do.
         if (request.sessionAttributes && self.persistentSession) {
           for (key in request.sessionAttributes) {
@@ -263,7 +455,7 @@ alexa.app = function(name, endpoint) {
           self.pre(request, response, requestType);
         }
         if (!response.resolved) {
-          if ("IntentRequest" === requestType) {
+          if ("INTENT" === requestType) {
             var intent = request_json.request.intent.name;
             if (typeof self.intents[intent] != "undefined" && typeof self.intents[intent]["function"] == "function") {
               if (false !== self.intents[intent]["function"](request, response)) {
@@ -272,7 +464,7 @@ alexa.app = function(name, endpoint) {
             } else {
               throw "NO_INTENT_FOUND";
             }
-          } else if ("LaunchRequest" === requestType) {
+          } else if ("LAUNCH" === requestType) {
             if (typeof self.launchFunc == "function") {
               if (false !== self.launchFunc(request, response)) {
                 response.send();
@@ -280,9 +472,15 @@ alexa.app = function(name, endpoint) {
             } else {
               throw "NO_LAUNCH_FUNCTION";
             }
-          } else if ("SessionEndedRequest" === requestType) {
+          } else if ("END" === requestType) {
             if (typeof self.sessionEndedFunc == "function") {
               if (false !== self.sessionEndedFunc(request, response)) {
+                response.send();
+              }
+            }
+          } else if ("NOTICE" === requestType) {
+            if (typeof self.noticeFunc == "function") {
+              if (false !== self.noticeFunc(request, response)) {
                 response.send();
               }
             }
@@ -307,8 +505,9 @@ alexa.app = function(name, endpoint) {
   // Extract the schema and generate a schema JSON object
   this.schema = function() {
     var schema = {
-      "intents": []
-    }, intentName, intent, key;
+        "intents": []
+      },
+      intentName, intent, key;
     for (intentName in self.intents) {
       intent = self.intents[intentName];
       var intentSchema = {
@@ -368,7 +567,7 @@ alexa.app = function(name, endpoint) {
     return self.handler;
   };
 
-  // A utility method to bootstrap alexa endpoints into express automatically
+  // A utility method to bootstrap dingdong endpoints into express automatically
   this.express = function(express, path, enableDebug) {
     var endpoint = (path || "/") + (self.endpoint || self.name);
     express.post(endpoint, function(req, res) {
@@ -394,10 +593,10 @@ alexa.app = function(name, endpoint) {
 
   // Add the app to the global list of named apps
   if (name) {
-    alexa.apps[name] = self;
+    dingdong.apps[name] = self;
   }
 
   return this;
 };
 
-module.exports = alexa;
+module.exports = dingdong;

@@ -1,6 +1,6 @@
 {
   "name": "dingdong",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A module to simplify creation of dingdong apps (Skills) using Node.js",
   "main": "index.js",
   "author": "Owen Xue",
@@ -26,6 +26,7 @@
   "dependencies": {
     "alexa-utterances": "^0.2.0",
     "bluebird": "^2.10.2",
+    "moment": "^2.15.1",
     "numbered": "^1.0.0"
   },
   "devDependencies": {
