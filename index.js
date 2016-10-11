@@ -318,7 +318,7 @@ dingdong.request = function(json) {
   this.data = json;
   this.slot = function(slotName, defaultValue) {
     try {
-      return this.data.slots[slotName].value;
+      return this.data.slots[slotName];
     } catch (e) {
       console.error("missing intent in request: " + slotName, e);
       return defaultValue;
