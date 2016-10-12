@@ -4,6 +4,7 @@ var SSML = require("./to-ssml");
 var dingdong = {};
 var _ = require('lodash');
 var moment = require('moment');
+var debug = require('debug')('dingdong');
 
 dingdong.response = function() {
   this.resolved = false;
@@ -30,6 +31,7 @@ dingdong.response = function() {
         "content": str
       });
     }
+    debug('say', this.response.directive);
     return this;
   };
   this.clear = function( /*str*/ ) {
@@ -39,6 +41,7 @@ dingdong.response = function() {
         "content": ''
       }]
     };
+    debug('clear');
     return this;
   };
   this.card = function(oCard) {
@@ -97,11 +100,12 @@ dingdong.response = function() {
     });
 
     this.response.app_show = oCard;
-
+    debug('card', oCard);
     return this;
   };
   this.shouldEndSession = function(bool) {
     this.response.is_end = bool;
+    debug('shouldEndSession', this.response.is_end);
     return this;
   };
   this.session = function(key, val) {
@@ -111,9 +115,11 @@ dingdong.response = function() {
       if(!this.response.sessionAttributes) this.response.sessionAttributes = {};
       this.response.sessionAttributes[key] = val;
     }
+    debug('res.session', key, val);
     return this;
   };
   this.clearSession = function(key) {
+    debug('clearSession', key);
     if (typeof key == "string" && typeof this.response.sessionAttributes[key] != "undefined") {
       delete this.response.sessionAttributes[key];
     } else {
@@ -125,6 +131,7 @@ dingdong.response = function() {
 };
 
 dingdong.request = function(json) {
+  debug('dingdong.request json', JSON.stringify(json));
   this.data = json;
   this.slot = function(slotName, defaultValue) {
     try {
@@ -147,15 +154,16 @@ dingdong.request = function(json) {
   this.sessionId = this.data.session.session_id;
   this.sessionAttributes = _.get(this.data, 'session.attributes');
   this.isSessionNew = (true === this.data.session.is_new);
-  switch (request_status) {
-    case 'END':
-      this.ended_reason = this.data.ended_reason;
-      break;
-    case 'NOTICE':
-        this.notice_type = this.data.notice_type;
-        break;
+
+  if(this.request_status === 'END') {
+    this.ended_reason = this.data.ended_reason;
   }
+  else if (this.request_status === 'NOTICE') {
+    this.notice_type = this.data.notice_type;
+  }
+
   this.session = function(key) {
+    debug('req.session', key);
     try {
       return this.data.session.attributes[key];
     } catch (e) {
@@ -261,6 +269,7 @@ dingdong.app = function(name, endpoint) {
           }
         }
         var requestType = request.request_status;
+        debug('request', 'requestType', requestType);
         if (typeof self.pre == "function") {
           self.pre(request, response, requestType);
         }
