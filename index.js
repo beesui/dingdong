@@ -7,189 +7,25 @@ var moment = require('moment');
 
 dingdong.response = function() {
   this.resolved = false;
-  // "responses": {
-  //   "200": {
-  //     "description": "OK",
-  //     "schema": {
-  //       "type": "object",
-  //       "properties": {
-  //         "version": {
-  //           "type": "string",
-  //           "example": "1.0",
-  //           "description": "版本号，回传平台调用时传递的值"
-  //         },
-  //         "is_end": {
-  //           "type": "boolean",
-  //           "description": "由开发者服务决定本次会话是否结束，如果标识为结束（true）平台会清除本次会话在平台保持的会如果标识为不结束（false）平台继续为用户保持当前会话数据。",
-  //           "example": true
-  //         },
-  //         "seq": {
-  //           "type": "string",
-  //           "example": "123123123",
-  //           "description": "交互流水号，回传平台调用时传递的值"
-  //         },
-  //         "ts": {
-  //           "type": "integer",
-  //           "example": 8728881267736576,
-  //           "description": "开发者服务应答平台的请求时间，格式为：当前时间的毫秒值",
-  //           "format": "int64"
-  //         },
-  //         "need_slot": {
-  //           "type": "string",
-  //           "example": "switch",
-  //           "description": "需要的槽值：如不为空则平台会主动为开发者收集此槽值服务，如用户输入的说法不符合槽值提取规为未识别重复收集。如为空，则表明不需要平台关注槽值的识别，全部透传到第三方服务进行判断。"
-  //         },
-  //         "device_show": {
-  //           "type": "object",
-  //           "properties": {
-  //             "items": {
-  //               "type": "array",
-  //               "items": {
-  //                 "type": "object",
-  //                 "description": "设备",
-  //                 "properties": {
-  //                   "type": {
-  //                     "type": "string",
-  //                     "description": "类型：1.TTS 2.AUDIO",
-  //                     "example": "1"
-  //                   },
-  //                   "content": {
-  //                     "type": "string",
-  //                     "description": "TTS播报内容；AUDIO链接。",
-  //                     "example": "hello"
-  //                   }
-  //                 },
-  //                 "additionalProperties": true
-  //               }
-  //             }
-  //           },
-  //           "description": "开发者需要音箱设备播报的内容。注：音箱会依据开发者给出的顺序播报。"
-  //         },
-  //         "device_action": {
-  //           "type": "object",
-  //           "properties": {
-  //             "items": {
-  //               "type": "array",
-  //               "items": {
-  //                 "type": "object",
-  //                 "description": "设备行为",
-  //                 "properties": {
-  //                   "invoke": {
-  //                     "type": "string",
-  //                     "description": "要调用的方法名",
-  //                     "example": "switch"
-  //                   },
-  //                   "params": {
-  //                     "type": "string",
-  //                     "description": "方法参数，JSON格式",
-  //                     "example": "on"
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           },
-  //           "description": "开发者需要调用音箱设备的预置行为，比如：灯效。注：音箱会依据开发者给出的顺序执行。"
-  //         },
-  //         "app_show": {
-  //           "type": "object",
-  //           "description": "开发者需要平台推送到音箱设备关联的手机App展现的内容，其中可以包含：文本、文本+图片、链接等",
-  //           "properties": {
-  //             "title": {
-  //               "type": "string",
-  //               "description": "开发者需要平台推送到音箱关联的手机App上展现的标题内容。注：不能超过20个字",
-  //               "example": "hello"
-  //             },
-  //             "type": {
-  //               "type": "string",
-  //               "description": "App展现内容类型：1. 纯文字 2. 文字+图片 3. 外部链接",
-  //               "example": "1"
-  //             },
-  //             "content": {
-  //               "type": "string",
-  //               "description": "type为1时使用",
-  //               "example": "hello"
-  //             },
-  //             "rich_contents": {
-  //               "type": "array",
-  //               "items": {
-  //                 "type": "object",
-  //                 "description": "推送到手机App上展现详细内容",
-  //                 "properties": {
-  //                   "type": {
-  //                     "type": "string",
-  //                     "description": "类型：1. 文字 2. 图片",
-  //                     "example": "1"
-  //                   },
-  //                   "content": {
-  //                     "type": "string",
-  //                     "description": "类型为1时：文字内容；类型为2时：图片链接，链接长度不可以超过512个字符",
-  //                     "example": "hello"
-  //                   }
-  //                 }
-  //               },
-  //               "description": "type为2时使用，注：App会根据开发者返回的顺序展示"
-  //             },
-  //             "url": {
-  //               "type": "string",
-  //               "description": "type为3时使用",
-  //               "example": "null"
-  //             }
-  //           }
-  //         },
-  //         "device_reprompt": {
-  //           "type": "object",
-  //           "description": "开发者需要用户无应答或输入有误的情况下，音箱重复播报的内容。",
-  //           "properties": {
-  //             "items": {
-  //               "type": "array",
-  //               "items": {
-  //                 "type": "object",
-  //                 "description": "设备行为",
-  //                 "properties": {
-  //                   "invoke": {
-  //                     "type": "string",
-  //                     "description": "要调用的方法名",
-  //                     "example": "switch"
-  //                   },
-  //                   "params": {
-  //                     "type": "string",
-  //                     "description": "方法参数，JSON格式",
-  //                     "example": "on"
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       },
-  //       "required": [
-  //         "version",
-  //         "is_end",
-  //         "ts",
-  //         "seq"
-  //       ],
-  //       "description": "请求返回内容"
-  //     }
-  //   }
-  // }
+
   this.response = {
-    "version": '1.0',
+    "versionid": '1.0',
     "is_end": true,
-    "seq": '',
-    "ts": moment().valueOf()
+    "sequence": '',
+    "timestamp": moment().valueOf()
   };
   this.say = function(str) {
 
-    if (typeof this.response.device_show == "undefined") {
-      this.response.device_show = {
-        "items": [{
+    if (typeof this.response.directive == "undefined") {
+      this.response.directive = {
+        "directive_items": [{
           "type": "1",
           "content": str
         }]
       };
     } else {
       // append str to the current outputSpeech, stripping the out speak tag
-      this.response.device_show.push({
+      this.response.directive.push({
         "type": "1",
         "content": str
       });
@@ -197,29 +33,12 @@ dingdong.response = function() {
     return this;
   };
   this.clear = function( /*str*/ ) {
-    this.response.device_show = {
-      "items": [{
+    this.response.directive = {
+      "directive_items": [{
         "type": "1",
         "content": ''
       }]
     };
-    return this;
-  };
-  this.reprompt = function(str) {
-    if (typeof this.response.device_reprompt == "undefined") {
-      this.response.device_reprompt = {
-        "items": [{
-          "type": "1",
-          "content": str
-        }]
-      };
-    } else {
-      // append str to the current outputSpeech, stripping the out speak tag
-      this.response.device_reprompt.push({
-        "type": "1",
-        "content": str
-      });
-    }
     return this;
   };
   this.card = function(oCard) {
@@ -227,7 +46,7 @@ dingdong.response = function() {
       oCard = {
         type: '1',
         title: arguments[0],
-        content: arguments[1]
+        text: arguments[1]
       };
     }
 
@@ -281,25 +100,16 @@ dingdong.response = function() {
 
     return this;
   };
-  this.linkAccount = function() {
-    this.response.card = {
-      "type": "LinkAccount"
-    };
-    return this;
-  };
-  this.shouldEndSession = function(bool, reprompt) {
+  this.shouldEndSession = function(bool) {
     this.response.is_end = bool;
-    if (reprompt) {
-      this.reprompt(reprompt);
-    }
     return this;
   };
   this.session = function(key, val) {
     if (typeof val == "undefined") {
       return this.response.sessionAttributes[key];
     } else {
-      // if(!this.response.sessionAttributes) this.response.sessionAttributes = {};
-      // this.response.sessionAttributes[key] = val;
+      if(!this.response.sessionAttributes) this.response.sessionAttributes = {};
+      this.response.sessionAttributes[key] = val;
     }
     return this;
   };
@@ -324,29 +134,27 @@ dingdong.request = function(json) {
       return defaultValue;
     }
   };
-  this.type = function() {
-    try {
-      return this.data.status;
-    } catch (e) {
-      console.error("missing type", e);
-      return null;
-    }
-  };
-  this.sessionDetails = {
-    "new": this.data.session.is_new,
-    "sessionId": this.data.session.sid,
-    "attributes": _.get(this.data, 'session.params')
-  };
-  this.version = this.data.version;
-  this.seq = this.data.seq;
-  this.content = this.data.content;
-  this.userId = this.data.user.user_id;
-  this.userAttributes = _.get(this.data, 'user.params');
-  this.applicationId = this.data.biz_info.biz_id;
-  this.applicationName = this.data.biz_info.biz_name;
-  this.sessionId = this.data.session.sid;
-  this.sessionAttributes = _.get(this.data, 'session.params');
+  this.request_status = this.data.status;
+  this.sessionDetails = _.get(this.data, 'session');
+  this.versionid = this.data.versionid;
+  this.sequence = this.data.sequence;
+  this.timestamp = this.data.timestamp;
+  this.input_text = this.data.input_text;
+  this.user_id = this.data.user.user_id;
+  this.userAttributes = _.get(this.data, 'user.attributes');
+  this.applicationId = this.data.application_info.application_id;
+  this.applicationName = this.data.application_info.application_name;
+  this.sessionId = this.data.session.session_id;
+  this.sessionAttributes = _.get(this.data, 'session.attributes');
   this.isSessionNew = (true === this.data.session.is_new);
+  switch (request_status) {
+    case 'END':
+      this.ended_reason = this.data.ended_reason;
+      break;
+    case 'NOTICE':
+        this.notice_type = this.data.notice_type;
+        break;
+  }
   this.session = function(key) {
     try {
       return this.data.session.attributes[key];
@@ -452,7 +260,7 @@ dingdong.app = function(name, endpoint) {
             response.session(key, request.sessionAttributes[key]);
           }
         }
-        var requestType = request.type();
+        var requestType = request.request_status;
         if (typeof self.pre == "function") {
           self.pre(request, response, requestType);
         }
