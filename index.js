@@ -235,7 +235,7 @@ dingdong.app = function(name, endpoint) {
     return new Promise(function(resolve, reject) {
       var request = new dingdong.request(request_json);
       var response = new dingdong.response();
-      response.response.seq = request.seq;
+      response.response.sequence = request.sequence;
       var postExecuted = false;
       // Attach Promise resolve/reject functions to the response object
       response.send = function(exception) {
