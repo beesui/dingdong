@@ -180,7 +180,7 @@ dingdong.app = function(name, endpoint) {
   this.name = name;
   this.messages = {
     // When an intent was passed in that the application was not configured to handle
-    "NO_INTENT_FOUND": "Sorry, the application didn't know what to do with that intent",
+    "NO_INTENT_FOUND": "抱歉，无法识别您说的内容，请您再尝试一遍！",
     // When the app was used with 'open' or 'launch' but no launch handler was defined
     "NO_LAUNCH_FUNCTION": "Try telling the application what to do instead of opening it",
     // When a request type was not recognized
@@ -276,6 +276,9 @@ dingdong.app = function(name, endpoint) {
         if (!response.resolved) {
           if ("INTENT" === requestType) {
             var intent = Object.keys(request_json.slots)[0];
+            if(intent === 'bizname' && Object.keys(request_json.slots).length > 1) {
+              intent = Object.keys(request_json.slots)[1];
+            }
             if (typeof self.intents[intent] != "undefined" && typeof self.intents[intent]["function"] == "function") {
               if (false !== self.intents[intent]["function"](request, response)) {
                 response.send();
