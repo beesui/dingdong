@@ -15,6 +15,13 @@ dingdong.response = function() {
     "sequence": '',
     "timestamp": moment().valueOf()
   };
+
+  this.need_slot = function(str) {
+    this.response.need_slot = str;
+    debug('need_slot', this.response.need_slot);
+    return this;
+  };
+
   this.say = function(str) {
 
     if (typeof this.response.directive == "undefined") {
@@ -41,6 +48,10 @@ dingdong.response = function() {
         "content": ''
       }]
     };
+    if(this.response.need_slot) {
+      delete this.response.need_slot;
+      if(this.response.need_slot) this.response.need_slot = '';
+    }
     debug('clear');
     return this;
   };
